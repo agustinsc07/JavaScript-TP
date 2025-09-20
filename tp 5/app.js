@@ -8,6 +8,9 @@ const pauseBtn = document.getElementById("pause")
 const resetBtn = document.getElementById("reset")
 const setTimeBtn = document.getElementById("setTime")
 
+// 🎵 referencia al audio de la alarma
+const alarmSound = document.getElementById("alarm-sound");
+
 function updateDisplay() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -26,7 +29,7 @@ setTimeBtn.addEventListener("click", () => {
 });
 
 startBtn.addEventListener("click", () => {
-    if (timerInterval) return; // Evita Multiples Intervalos
+    if (timerInterval) return; // Evita múltiples intervalos
     timerInterval = setInterval(() => {
         if (totalSeconds > 0) {
             totalSeconds--;
@@ -34,7 +37,10 @@ startBtn.addEventListener("click", () => {
         } else {
             clearInterval(timerInterval);
             timerInterval = null;
-            alert("¡Tiempo Terminado!")
+            // 🔔 Reproducir sonido cuando termine
+            alarmSound.currentTime = 0; 
+            alarmSound.play();
+            alert("⏰ ¡Tiempo Terminado!");
         }
     }, 1000);
 });
@@ -49,6 +55,9 @@ resetBtn.addEventListener("click", () => {
     updateDisplay();
     clearInterval(timerInterval);
     timerInterval = null;
+    // 🔇 detener sonido si estaba sonando
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 });
 
 updateDisplay();
